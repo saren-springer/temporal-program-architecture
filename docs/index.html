@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Saren M. Springer" />
+
+<meta name="date" content="2026-07-13" />
+
+<title>Worked Example: Female 5xFAD Time Course with Centroid-Based Trajectory Collapse</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Worked Example: Female 5xFAD Time Course
+with Centroid-Based Trajectory Collapse</h1>
+<h4 class="author">Saren M. Springer</h4>
+<h4 class="date">2026-07-13</h4>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>This vignette documents a complete WATER analysis of female wildtype
+samples from a 5xFAD aging dataset. The example contains four ages—4, 8,
+12, and 18 months—with three biological replicates per age. WATER was
+run using its default centroid-based method for collapsing related
+clusters into trajectories.</p>
+<p>The purpose of this vignette is to show:</p>
+<ol style="list-style-type: decimal">
+<li>how to organize the input data;</li>
+<li>how to launch a complete WATER run;</li>
+<li>which interactive decisions were made during clustering and
+refinement;</li>
+<li>how to interpret the audit and stability outputs; and</li>
+<li>where the final results are saved.</li>
+</ol>
+<p>This is a workflow example rather than a biological interpretation of
+the dataset.</p>
+</div>
+<div id="dataset-structure" class="section level1">
+<h1>Dataset structure</h1>
+<p>The expression matrix contained 55,351 input features and 12 samples.
+Samples were ordered by age, with three replicates at each
+timepoint.</p>
+<table>
+<thead>
+<tr class="header">
+<th>WATER timepoint</th>
+<th align="right">Biological age</th>
+<th align="right">Replicates</th>
+<th>Sample names</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>T1</td>
+<td align="right">4 months</td>
+<td align="right">3</td>
+<td>WT1_F_4M, WT2_F_4M, WT3_F_4M</td>
+</tr>
+<tr class="even">
+<td>T2</td>
+<td align="right">8 months</td>
+<td align="right">3</td>
+<td>WT1_F_8M, WT2_F_8M, WT3_F_8M</td>
+</tr>
+<tr class="odd">
+<td>T3</td>
+<td align="right">12 months</td>
+<td align="right">3</td>
+<td>WT1_F_12M, WT2_F_12M, WT3_F_12M</td>
+</tr>
+<tr class="even">
+<td>T4</td>
+<td align="right">18 months</td>
+<td align="right">3</td>
+<td>WT1_F_18M, WT2_F_18M, WT3_F_18M</td>
+</tr>
+</tbody>
+</table>
+<p>Two input tables were used:</p>
+<ul>
+<li>an expression matrix, with feature identifiers in the first column
+and samples in the remaining columns;</li>
+<li>a log2 fold-change matrix aligned to the same feature
+identifiers.</li>
+</ul>
+<p>A feature list was also supplied through
+<code>feature_list = &quot;filter.txt&quot;</code>.</p>
+</div>
+<div id="load-water-and-the-input-files" class="section level1">
+<h1>Load WATER and the input files</h1>
+<p>During package development, the WATER runner can be sourced
+directly.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;WT_female_Alz_exp_data.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>log2fc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;WT_female_Alz_log2fc_data.csv&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;Running_WATER.R&quot;</span>)</span></code></pre></div>
+</div>
+<div id="run-water" class="section level1">
+<h1>Run WATER</h1>
+<p>The complete analysis was launched with <code>run_water()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>water <span class="ot">&lt;-</span> <span class="fu">run_water</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">replicates =</span> <span class="fu">list</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">T1 =</span> <span class="dv">3</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">T2 =</span> <span class="dv">3</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">T3 =</span> <span class="dv">3</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="at">T4 =</span> <span class="dv">3</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  ),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">log2fc =</span> log2fc,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">preprocess_params =</span> <span class="fu">list</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="at">modality =</span> <span class="st">&quot;RNA&quot;</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="st">&quot;WT_female_Alz&quot;</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="at">save_outputs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">tpm_threshold =</span> <span class="fl">1.0</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">feature_list =</span> <span class="st">&quot;filter.txt&quot;</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  )</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>The output directory used in this example was:</p>
+<pre class="text"><code>WT_female_Alz/</code></pre>
+<p>WATER created stage-specific subdirectories containing tables, R
+objects, and plots.</p>
+</div>
+<div id="preprocessing-results" class="section level1">
+<h1>Preprocessing results</h1>
+<p>WATER first initialized the sample structure, filtered features,
+aligned the expression and log2 fold-change inputs, normalized the
+expression values, and performed PCA.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Preprocessing step</th>
+<th align="right">Features retained</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Raw input</td>
+<td align="right">55,351</td>
+</tr>
+<tr class="even">
+<td>TPM threshold, timepoint mean ≥ 1</td>
+<td align="right">18,246</td>
+</tr>
+<tr class="odd">
+<td>Feature-list filter</td>
+<td align="right">13,147</td>
+</tr>
+<tr class="even">
+<td>Differentially abundant features</td>
+<td align="right">1,980</td>
+</tr>
+<tr class="odd">
+<td>Non-differentially abundant features</td>
+<td align="right">11,167</td>
+</tr>
+</tbody>
+</table>
+<p>The 1,980 differentially abundant features were passed to temporal
+clustering.</p>
+</div>
+<div id="initial-clustering-and-trajectory-labeling" class="section level1">
+<h1>Initial clustering and trajectory labeling</h1>
+<p>WATER evaluated candidate cluster numbers from <code>k = 2</code>
+through <code>k = 30</code> using silhouette analysis and generated
+heatmaps for candidate solutions.</p>
+<p>The recommended values were:</p>
+<pre class="text"><code>k = 3, 8, 16, 17</code></pre>
+<p>For this analysis, <code>k = 8</code> was selected based on
+inspection of the resulting hierarchical clustering.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Initial cluster</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1,196</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">123</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">171</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">75</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">114</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">115</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">117</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">69</td>
+</tr>
+</tbody>
+</table>
+<div id="centroid-based-trajectory-collapse" class="section level2">
+<h2>Centroid-based trajectory collapse</h2>
+<p>At the trajectory-labeling prompt, the default centroid method was
+selected:</p>
+<pre class="text"><code>Centroid clustering, r_threshold = 0.8</code></pre>
+<p>WATER compared the mean z-scored expression profile of each cluster
+and grouped clusters whose centroid profiles met the correlation
+threshold. At <em>r</em> = 0.8, the eight initial clusters remained as
+eight distinct trajectories in this dataset.</p>
+<p>WATER then wrote a rename template:</p>
+<pre class="text"><code>label_classic/tables/trajectory_rename_template.csv</code></pre>
+<p>The <code>Biological_label</code> column was completed manually, and
+the edited file was supplied back to WATER. The initial eight
+trajectories were:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Trajectory</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4M_High_and_18M_High</td>
+<td align="right">1,196</td>
+</tr>
+<tr class="even">
+<td>18M_High</td>
+<td align="right">171</td>
+</tr>
+<tr class="odd">
+<td>12M_High</td>
+<td align="right">123</td>
+</tr>
+<tr class="even">
+<td>4M_High</td>
+<td align="right">117</td>
+</tr>
+<tr class="odd">
+<td>Down-Up-Down</td>
+<td align="right">115</td>
+</tr>
+<tr class="even">
+<td>18M_Low</td>
+<td align="right">114</td>
+</tr>
+<tr class="odd">
+<td>Late_High</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td>8M_High</td>
+<td align="right">69</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="initial-audit" class="section level1">
+<h1>Initial audit</h1>
+<p>WATER next evaluated assignment stability using leave-one-out
+analysis and a correlation-based audit.</p>
+<div id="initial-leave-one-out-analysis" class="section level2">
+<h2>Initial leave-one-out analysis</h2>
+<p>Each of the 12 samples was removed once, and the clustering solution
+was reevaluated.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th align="right">Initial result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean adjusted Rand index</td>
+<td align="right">0.289</td>
+</tr>
+<tr class="even">
+<td>Cluster retention</td>
+<td align="right">50.5%</td>
+</tr>
+<tr class="odd">
+<td>Trajectory retention</td>
+<td align="right">50.5%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="initial-correlation-audit" class="section level2">
+<h2>Initial correlation audit</h2>
+<p>Each feature was compared with the centroid of its assigned
+trajectory and with competing trajectories.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Audit decision</th>
+<th align="right">Features</th>
+<th align="right">Percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Keep original</td>
+<td align="right">1,533</td>
+<td align="right">77.4%</td>
+</tr>
+<tr class="even">
+<td>Reassigned</td>
+<td align="right">210</td>
+<td align="right">10.6%</td>
+</tr>
+<tr class="odd">
+<td>Weak</td>
+<td align="right">88</td>
+<td align="right">4.4%</td>
+</tr>
+<tr class="even">
+<td>Ambiguous</td>
+<td align="right">149</td>
+<td align="right">7.5%</td>
+</tr>
+</tbody>
+</table>
+<p>The weak and ambiguous feature sets were carried into dedicated
+refinement steps rather than being discarded.</p>
+</div>
+</div>
+<div id="refinement-of-ambiguous-features" class="section level1">
+<h1>Refinement of ambiguous features</h1>
+<p>The 149 ambiguous features were reclustered independently. WATER
+recommended:</p>
+<pre class="text"><code>k = 2, 4, 7</code></pre>
+<p>For this run, <code>k = 4</code> was selected. The default
+centroid-based collapse method was again used with
+<code>r_threshold = 0.8</code>. All four ambiguous clusters remained
+distinct before biological renaming.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Ambiguous trajectory</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>18M_High</td>
+<td align="right">92</td>
+</tr>
+<tr class="even">
+<td>4M_High_and_18M_High</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td>12M_High</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td>18M_Low</td>
+<td align="right">13</td>
+</tr>
+</tbody>
+</table>
+<p>The ambiguous rename template was saved to:</p>
+<pre class="text"><code>recluster_ambiguous/tables/ambiguous_rename_template.csv</code></pre>
+</div>
+<div id="refinement-of-weak-features" class="section level1">
+<h1>Refinement of weak features</h1>
+<p>The 88 weak features were also reclustered independently. WATER
+recommended:</p>
+<pre class="text"><code>k = 2, 8, 10</code></pre>
+<p>For this run, <code>k = 8</code> was selected. The default
+centroid-based collapse method was used with
+<code>r_threshold = 0.8</code>. The eight weak clusters remained
+distinct before renaming.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Weak trajectory</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8M_Low</td>
+<td align="right">28</td>
+</tr>
+<tr class="even">
+<td>12M_Low</td>
+<td align="right">17</td>
+</tr>
+<tr class="odd">
+<td>4M_Low</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td>Late_High</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td>Early_High</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td>4M_High</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td>Middle_High</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The weak rename template was saved to:</p>
+<pre class="text"><code>recluster_weak/tables/weak_rename_template.csv</code></pre>
+</div>
+<div id="final-integrated-trajectories" class="section level1">
+<h1>Final integrated trajectories</h1>
+<p>After integration of original, reassigned, ambiguous, and weak
+features, all 1,980 differentially abundant features were represented in
+the final trajectory set.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Final trajectory</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4M_High_and_18M_High</td>
+<td align="right">904</td>
+</tr>
+<tr class="even">
+<td>18M_High</td>
+<td align="right">296</td>
+</tr>
+<tr class="odd">
+<td>4M_High</td>
+<td align="right">196</td>
+</tr>
+<tr class="even">
+<td>Down-Up-Down</td>
+<td align="right">143</td>
+</tr>
+<tr class="odd">
+<td>12M_High</td>
+<td align="right">136</td>
+</tr>
+<tr class="even">
+<td>18M_Low</td>
+<td align="right">119</td>
+</tr>
+<tr class="odd">
+<td>Late_High</td>
+<td align="right">66</td>
+</tr>
+<tr class="even">
+<td>8M_High</td>
+<td align="right">49</td>
+</tr>
+<tr class="odd">
+<td>8M_Low</td>
+<td align="right">28</td>
+</tr>
+<tr class="even">
+<td>12M_Low</td>
+<td align="right">17</td>
+</tr>
+<tr class="odd">
+<td>4M_Low</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td>Early_High</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td>Middle_High</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td align="right"><strong>1,980</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="secondary-correlation-validation" class="section level1">
+<h1>Secondary correlation validation</h1>
+<p>WATER repeated the correlation audit after refinement.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Final audit decision</th>
+<th align="right">Features</th>
+<th align="right">Percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stable</td>
+<td align="right">1,908</td>
+<td align="right">96.4%</td>
+</tr>
+<tr class="even">
+<td>Reassign candidate</td>
+<td align="right">49</td>
+<td align="right">2.5%</td>
+</tr>
+<tr class="odd">
+<td>Low confidence</td>
+<td align="right">23</td>
+<td align="right">1.2%</td>
+</tr>
+</tbody>
+</table>
+<p>The per-trajectory correlation summary was:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Final trajectory</th>
+<th align="right">Mean correlation</th>
+<th align="right">Median correlation</th>
+<th align="right">Features</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4M_High_and_18M_High</td>
+<td align="right">0.941</td>
+<td align="right">0.954</td>
+<td align="right">890</td>
+</tr>
+<tr class="even">
+<td>18M_High</td>
+<td align="right">0.956</td>
+<td align="right">0.971</td>
+<td align="right">285</td>
+</tr>
+<tr class="odd">
+<td>4M_High</td>
+<td align="right">0.942</td>
+<td align="right">0.954</td>
+<td align="right">185</td>
+</tr>
+<tr class="even">
+<td>Down-Up-Down</td>
+<td align="right">0.919</td>
+<td align="right">0.935</td>
+<td align="right">139</td>
+</tr>
+<tr class="odd">
+<td>12M_High</td>
+<td align="right">0.940</td>
+<td align="right">0.956</td>
+<td align="right">131</td>
+</tr>
+<tr class="even">
+<td>18M_Low</td>
+<td align="right">0.917</td>
+<td align="right">0.929</td>
+<td align="right">122</td>
+</tr>
+<tr class="odd">
+<td>Late_High</td>
+<td align="right">0.883</td>
+<td align="right">0.891</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td>8M_High</td>
+<td align="right">0.933</td>
+<td align="right">0.951</td>
+<td align="right">49</td>
+</tr>
+<tr class="odd">
+<td>8M_Low</td>
+<td align="right">0.916</td>
+<td align="right">0.969</td>
+<td align="right">38</td>
+</tr>
+<tr class="even">
+<td>4M_Low</td>
+<td align="right">0.836</td>
+<td align="right">0.881</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td>12M_Low</td>
+<td align="right">0.910</td>
+<td align="right">0.927</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td>Early_High</td>
+<td align="right">0.888</td>
+<td align="right">0.930</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td>Middle_High</td>
+<td align="right">0.777</td>
+<td align="right">0.795</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="secondary-leave-one-out-validation" class="section level1">
+<h1>Secondary leave-one-out validation</h1>
+<p>The refined trajectory assignments were reevaluated across all 12
+leave-one-out iterations.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th align="right">Secondary result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean trajectory retention</td>
+<td align="right">78.6%</td>
+</tr>
+<tr class="even">
+<td>Mean reassignment</td>
+<td align="right">21.4%</td>
+</tr>
+<tr class="odd">
+<td>Mean low-confidence classification</td>
+<td align="right">1.5%</td>
+</tr>
+</tbody>
+</table>
+<p>The increase in retention from the initial to the secondary analysis
+reflects the effect of WATER’s reassignment and targeted reclustering
+steps.</p>
+</div>
+<div id="output-directory-guide" class="section level1">
+<h1>Output directory guide</h1>
+<p>The main output folders generated during this analysis were:</p>
+<pre class="text"><code>WT_female_Alz/
+|-- initialize/
+|-- filter_expression/
+|-- filter/
+|-- normalize/
+|-- PCA/
+|-- cut_classic/
+|-- label_classic/
+|-- loo_initial/
+|-- correlate_initial/
+|-- recluster_ambiguous/
+|-- recluster_weak/
+|-- correlate_secondary/
+|-- loo_secondary/
+`-- final/</code></pre>
+<p>Each analysis stage contains one or more of the following:</p>
+<pre class="text"><code>tables/    Tabular outputs in .xlsx, .csv, or .txt format
+objects/   Serialized R objects in .rds format
+plots/     Diagnostic or final visualizations</code></pre>
+</div>
+<div id="session-information" class="section level1">
+<h1>Session information</h1>
+<p>Record the package and R versions used for the analysis:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
