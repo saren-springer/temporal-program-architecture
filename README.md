@@ -28,7 +28,7 @@ WATER reconstructs temporal expression trajectories independently within each bi
 <sup>6</sup>Institute for Systems Genomics, University of Connecticut, Storrs, CT 06269, USA*
 
  
-<sup>*</sup>To whom correspondance should be addressed.
+<sup>*</sup>To whom correspondence should be addressed.
 
 <br>
 
@@ -362,6 +362,6 @@ Manuscript in submission.
 **Repository:**  
 Springer S.M., et al.  
 *WATER: Windowed Assignment of Temporal Expression of RNA.*  
-GitHub: `<repository URL>`
+GitHub: [saren-springer/temporal-program-architecture](https://github.com/saren-springer/temporal-program-architecture)
 
 <br><br>
