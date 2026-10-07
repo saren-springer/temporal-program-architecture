@@ -368,4 +368,6 @@ Springer S.M., et al.
 *WATER: Windowed Assignment of Temporal Expression of RNA.*  
 GitHub: [saren-springer/temporal-program-architecture](https://github.com/saren-springer/temporal-program-architecture)
 
+**Software archive**
+Springer S.M., Kanadia R.N. WATER: Windowed Assignment of Temporal Expression of RNA, version 1.0.0. Zenodo. 2026. doi:10.5281/zenodo.23224932
 <br><br>
