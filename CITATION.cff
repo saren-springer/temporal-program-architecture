@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use WATER in your research, please cite the software using the metadata below."
+type: software
+
+title: "WATER: Windowed Assignment of Temporal Expression of RNA"
+
+authors:
+  - family-names: "Springer"
+    given-names: "Saren M."
+    affiliation: "University of Connecticut"
+
+  - family-names: "Kanadia"
+    given-names: "Rahul N."
+    affiliation: "University of Connecticut"
+
+version: "1.0.0"
+date-released: 2026-10-07
+
+repository-code: "https://github.com/saren-springer/temporal-program-architecture"
+
+license: MIT
+
+keywords:
+  - temporal transcriptomics
+  - RNA-seq
+  - gene expression trajectories
+  - time-series analysis
+  - molecular heterochrony
+  - bioinformatics
+  - computational biology
