@@ -105,7 +105,7 @@ Because the scripts use relative `source()` calls, run WATER from the repository
 
 ## Requirements
 
-WATER requires R and the following packages.
+WATER is implemented in R and was developed and tested using R 4.5.1 on Windows 11. WATER dependencies include the following packages.
 
 ### CRAN packages
 
@@ -350,6 +350,10 @@ WT_MUT_comparison/
 ```
 
 GO output files are created only when enrichment results are available.
+
+## License
+
+WATER is distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Citation
 
